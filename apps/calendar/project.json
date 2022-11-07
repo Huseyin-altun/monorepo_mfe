@@ -1,0 +1,115 @@
+{
+  "name": "calendar",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/calendar/src",
+  "prefix": "mf",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/calendar",
+        "index": "apps/calendar/src/index.html",
+        "main": "apps/calendar/src/main.ts",
+        "polyfills": "apps/calendar/src/polyfills.ts",
+        "tsConfig": "apps/calendar/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/calendar/src/favicon.ico", "apps/calendar/src/assets"],
+        "styles": ["apps/calendar/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/calendar/webpack.config.js"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/calendar/src/environments/environment.ts",
+              "with": "apps/calendar/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/calendar/webpack.prod.config.js"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nrwl/angular:webpack-dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "calendar:build:production"
+        },
+        "development": {
+          "browserTarget": "calendar:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4223,
+        "publicHost": "http://localhost:4223"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "calendar:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/calendar/**/*.ts", "apps/calendar/**/*.html"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/calendar/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/angular:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "calendar:build",
+        "port": 4223
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "calendar:build:development"
+        },
+        "production": {
+          "buildTarget": "calendar:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
